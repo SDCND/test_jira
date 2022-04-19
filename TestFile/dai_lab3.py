@@ -3,6 +3,10 @@ import sys
 import numpy as np
 import cv2
 
+
+# C:\Users\steve\Documents\ESD2Project\AprilTagTenniseBallTracker\testImages\left9.jpg
+# C:\Users\steve\Documents\ESD2Project\AprilTagTenniseBallTracker\testImages\right9.jpg
+
 imageFilePath = raw_input('Enter Image Path: ')
 image = cv2.imread(imageFilePath,0)
 output = cv2.imread(imageFilePath,1)
