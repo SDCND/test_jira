@@ -1,3 +1,11 @@
+'''
+ Author: Alejandro(Steven)
+ Date: April.13-2022
+ File Name: ballPrediction.py
+ File Description: 
+    For this file the ball trejectory will be predicted using the last three x,y,z location
+    of the ball centeroid coming from the ball tracking file(function)
+'''
 import cv2
 import cvzone
 from cvzone.ColorModule import ColorFinder
@@ -15,34 +23,42 @@ xList = [item for item in range(0, 2436)]
 
 while True:
     # Grabbing img
-    success, img = cap.read() # Taking in the video from the video folder
+    success, img = cap.read()
     # img = cv2.imread("testImages/orangeBall.jpg")
 
-    # Find the color Ball
+    # Create the mask for the color of object
     imgColor, mask  = myColorFinder.update(img,hsvVals)
+    
+    # Mask to help get rid of noise
+    # mask = cv2.erode(mask1,(5,5),iterations=3)
+    # mask = cv2.dilate(mask,(5,5),iterations=3)
 
-    # Find Location of Ball
+    # Find object external outline points
     imgContours, contours = cvzone.findContours(img, mask, minArea=200)
 
+    # Add the x and y centers of the ball in the two array list
     if contours:
         posListX.append(contours[0]['center'][0])
         posListY.append(contours[0]['center'][1])
+    
     if posListX:
         # Polynomial Regression y = Ax^2 + Bx + C
         # Find the Coefficients
         A, B, C = np.polyfit(posListX, posListY, 2)
  
-        for i, (posX, posY) in enumerate(zip(posListX, posListY)):
+        for imageFrame, (posX, posY) in enumerate(zip(posListX, posListY)):
             pos = (posX, posY)
             cv2.circle(imgContours, pos, 10, (0, 255, 0), cv2.FILLED)
-            if i == 0:
+            if imageFrame == 0:
                 cv2.line(imgContours, pos, pos, (0, 255, 0), 5)
             else:
-                cv2.line(imgContours, pos, (posListX[i - 1], posListY[i - 1]), (0, 255, 0), 5)
- 
+                cv2.line(imgContours, pos, (posListX[imageFrame - 1], posListY[imageFrame - 1]), (0, 255, 0), 5)
+        
+        # Create the dot of the cetner of the ball
         for x in xList:
             y = int(A * x ** 2 + B * x + C)
             cv2.circle(imgContours, (x, y), 2, (255, 0, 255), cv2.FILLED)
+ 
  
         if len(posListX) < 10:
             # Prediction
@@ -53,14 +69,12 @@ while True:
  
             x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
             prediction = 330 < x < 430
+ 
     # Display
     img = cv2.resize(mask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
     cv2.imshow("Image", img) # Makes the img appear on new window
 
     imgColor = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
     cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
-    
-    imgContours = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("ImageColor", imgContours) # Makes the img appear on new window
     
     cv2.waitKey(50) #Change the FPS for user sight only
