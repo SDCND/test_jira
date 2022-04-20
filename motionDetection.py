@@ -20,7 +20,7 @@ while True:
     
     vidMotionDetection = substractor.apply(videoGray)
     
-    _, thresholdMask = cv2.threshold(videoGray,150,255,cv2.THRESH_BINARY)
+    _, thresholdMask = cv2.threshold(videoGray,100,255,cv2.THRESH_BINARY)
     # imgDiff = cv2.absdiff(firstFrameGray,imgGray)
     
     # imgDiff =  cv2.GaussianBlur(imgDiff,(5,5),0)

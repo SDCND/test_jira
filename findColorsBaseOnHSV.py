@@ -8,8 +8,6 @@ import cv2
 import numpy as np
 import logging
 
-
-
 class ColorFinder:
     def __init__(self, trackBar=False):
         self.trackBar = trackBar

@@ -1,6 +1,7 @@
 import cv2
+
 # read image through command line
-img = cv2.imread(args["ipimage"])
+img = cv2.imread("testImages/left5.jpg")
 
 # convert the image to grayscale
 gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -9,11 +10,11 @@ gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret,thresh = cv2.threshold(gray_image,127,255,0)
 
 # find contours in the binary image
-im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+im2, contours = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 for c in contours:
    # calculate moments for each contour
    # Takes an exact value of the RGB pixels of the contour(objective)
-   M = cv2.moments(c)
+   M = cv2.moments(contours[c])
 
    # calculate x,y coordinate of center
    cX = int(M["m10"] / M["m00"])

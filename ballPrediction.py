@@ -59,11 +59,10 @@ while True:
             y = int(A * x ** 2 + B * x + C)
             cv2.circle(imgContours, (x, y), 2, (255, 0, 255), cv2.FILLED)
  
- 
         if len(posListX) < 10:
             # Prediction
             # X values 330 to 430  Y 590
-            a = A
+            a = A                                                                       
             b = B
             c = C - 590
  
