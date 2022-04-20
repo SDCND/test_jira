@@ -17,10 +17,13 @@ cap = cv2.VideoCapture('videos/bounces/orangeBallBouncePingPongTable1.mov')
 
 # Create the Color finder object
 myColorFinder = ColorFinder(False)
+
+HSVOragneValue = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
 hsvVals = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
 
+imageFrameWidthDimensions = 2436 #4k
 posListX, posListY = [], []
-xList = [item for item in range(0, 2436)]
+xList = [item for item in range(0, imageFrameWidthDimensions)]
 
 while True:
     # Grabbing img
@@ -49,6 +52,7 @@ while True:
         A, B, C = np.polyfit(posListX, posListY, 2)
  
         for imageFrame, (posX, posY) in enumerate(zip(posListX, posListY)):
+    
             pos = (posX, posY)
             cv2.circle(imgContours, pos, 10, (0, 255, 0), cv2.FILLED)
             if imageFrame == 0:
