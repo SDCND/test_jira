@@ -9,6 +9,15 @@ File Description:
 # imports
 import cv2
 import numpy as np
+from frameGrabber import ImageFeedthrough
+
+global camera
+camera = ImageFeedthrough()
+
+time.sleep(1)
+frameLeft,frameRight = camera.getStereoRGB()
+cv2.imwrite("left.jpg", frameLeft)
+cv2.imwrite("right.jpg", frameRight)
 
 # Setup SimpleBlobDetector parameters.
 params = cv2.SimpleBlobDetector_Params()
@@ -18,6 +27,7 @@ params = cv2.SimpleBlobDetector_Params()
 # params.maxThreshold = 200
 
 #Filter by Area.
+
 params.filterByArea = True
 params.minArea = 2000
 params.maxArea = 14500
