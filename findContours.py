@@ -1,3 +1,12 @@
+'''
+ Author: Alejandro(Steven)
+ Date: April.20-2022
+ File Name: ballAlgorithm2.py
+ File Description: 
+    Using motion detection an image with only the objects that moved will be show in the new image.
+    With the use of findcontours the center of the ball will be used to ge the ball location in the image
+'''
+
 import cv2
 
 def findContours(img, imgPre, minArea=1000, sort=True, filter=0, drawCon=True, c=(255, 0, 0)):
