@@ -7,6 +7,7 @@
     With the use of findcontours the center of the ball will be used to ge the ball location in the image
     Output the real world X,Y,& Z of the ball and if in or out of bound
 '''
+
 from itertools import count
 from xmlrpc.client import boolean
 import cv2
@@ -38,7 +39,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
         imgContours, contours = cvzone.findContours(videoGray, imgMotionDetection, minArea=200)
 
         # Add the x and y centers of the ball in the two array list
-        
+
         if contours:
             posListX.append(contours[0]['center'][0])
             posListY.append(contours[0]['center'][1])
@@ -48,11 +49,10 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
             # del posListX[0]
             # del posListY[0]
 
-            
             # Polynomial Regression y = Ax^2 + Bx + C
             # Find the Coefficients
             A, B, C = np.polyfit(posListX, posListY, 2)
-    
+
             for imageFrame, (posX, posY) in enumerate(zip(posListX, posListY)):
                 pos = (posX, posY)
                 cv2.circle(imgContours, pos, 10, (0, 255, 0), cv2.FILLED)
@@ -84,7 +84,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 b = 60; # baseline [mm]
                 f = 6; # focal length [mm]
                 pixelSize = .006; # pixel size [mm]
-                
+
                 # This will be coming from the position list 
                 # of the two images being processed
                 xLeft = float(xLeft)
@@ -96,7 +96,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 Z = (b * f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*pixelSize)
                 X = (Z * (xLeft-cxLeft)*pixelSize)/f
                 Y = (Z * (yLeft-cyLeft)*pixelSize)/f
-                
+
         # Display
         # videoGray = cv2.resize(videoGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
         # cv2.imshow("Video Gray",videoGray)
@@ -104,7 +104,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
         cv2.imshow("Motion Detection", imgMotionDetection)
         imgColor = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
         cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
-        
+
         # Return variables
         return X,Y,Z, inbound
 
