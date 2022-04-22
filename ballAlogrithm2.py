@@ -22,8 +22,6 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
     path1 = 'videos/bounds/orangeBallMiddleBound2.mov'
     path2 = 'videos/bounds/orangeBallRightBound2.mov'
     cap = cv2.VideoCapture(path1)
-
-    
     posListX, posListY = [], []
     xList = [item for item in range(0, imageFrameWidthDimensions)]
 
@@ -49,7 +47,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
             print(posListX)
             # del posListX[0]
             # del posListY[0]
-            
+
             
             # Polynomial Regression y = Ax^2 + Bx + C
             # Find the Coefficients
