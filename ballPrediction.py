@@ -47,6 +47,7 @@ while True:
         posListY.append(contours[0]['center'][1])
     
     if posListX:
+        # Ball Prediction
         # Polynomial Regression y = Ax^2 + Bx + C
         # Find the Coefficients
         A, B, C = np.polyfit(posListX, posListY, 2)
@@ -65,13 +66,13 @@ while True:
             y = int(A * x ** 2 + B * x + C)
             cv2.circle(imgContours, (x, y), 2, (255, 0, 255), cv2.FILLED)
  
+        # Prediction
         if len(posListX) < 10:
-            # Prediction
             # X values 330 to 430  Y 590
             a = A                                                                       
             b = B
             c = C - 590
- 
+            # Still need to do the ball radius landing
             x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
             prediction = 330 < x < 430
  
