@@ -1,5 +1,4 @@
 import cv2
-from cv2 import threshold
 
 # cap = cv2.VideoCapture(0)
 path = 'videos/bounces/orangeBallBouncePingPongTable1.mov'

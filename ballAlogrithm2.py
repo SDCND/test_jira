@@ -8,13 +8,10 @@
     Output the real world X,Y,& Z of the ball and if in or out of bound
 '''
 
-from itertools import count
-from xmlrpc.client import boolean
 import cv2
-import cvzone
-from cvzone.ColorModule import ColorFinder
 import numpy as np
 import math
+from findContours import findContours
 
 def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
     # Testing - Taking in a video for now
@@ -22,12 +19,13 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
     path = 'videos/bounces/orangeBallBouncePingPongTable1.mov'
     path1 = 'videos/bounds/orangeBallMiddleBound2.mov'
     path2 = 'videos/bounds/orangeBallRightBound2.mov'
-    cap = cv2.VideoCapture(path1)
-    posListX, posListY = [], []
+    cap = cv2.VideoCapture(path2)
+    posListX, posListY, positions = [], [], []
     xList = [item for item in range(0, imageFrameWidthDimensions)]
 
     substractor = cv2.createBackgroundSubtractorMOG2()
-
+    
+    inbound = True
     while True:
         success, video = cap.read()
         
@@ -36,7 +34,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
         imgMotionDetection = substractor.apply(videoGray)
 
         # Find object external outline points
-        imgContours, contours = cvzone.findContours(videoGray, imgMotionDetection, minArea=200)
+        imgContours, contours = cvzone.findContours(videoGray, imgMotionDetection, minArea=1000)
 
         # Add the x and y centers of the ball in the two array list
 
@@ -53,6 +51,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
             # Find the Coefficients
             A, B, C = np.polyfit(posListX, posListY, 2)
 
+            # Draws the line and dot of the centroid of the ball
             for imageFrame, (posX, posY) in enumerate(zip(posListX, posListY)):
                 pos = (posX, posY)
                 cv2.circle(imgContours, pos, 10, (0, 255, 0), cv2.FILLED)
@@ -67,7 +66,6 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 cv2.circle(imgContours, (x, y), 2, (255, 0, 255), cv2.FILLED)
     
             # Prediction
-            inbound = True
             if len(posListX) < 10:
                 # X values 330 to 430  Y 590
                 a = A                                                                       
@@ -79,6 +77,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 prediction = 330 < x < 430
                 # Covernting Camera to Real World
                 #*************** Hard Code Numbers From Intrinsic ***********
+                # Camera Demenisons: 752 x 480 pixels
                 cxLeft = 752 # width
                 cyLeft = 480 # height
                 b = 60; # baseline [mm]
@@ -87,16 +86,17 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
 
                 # This will be coming from the position list 
                 # of the two images being processed
-                xLeft = float(xLeft)
-                yLeft = float(xLeft)
-                xRight = float(xRight)
-                yLeft = float(xLeft)
+                xLeft = float(5)
+                yLeft = float(5)
+                xRight = float(6)
+                yLeft = float(6)
                 centerxLeft = float(xLeft/2)
                 centerxRight = float(xRight/2)
                 Z = (b * f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*pixelSize)
                 X = (Z * (xLeft-cxLeft)*pixelSize)/f
                 Y = (Z * (yLeft-cyLeft)*pixelSize)/f
-
+                frame = [X, Y, Z]
+                positions.append(frame)
         # Display
         # videoGray = cv2.resize(videoGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
         # cv2.imshow("Video Gray",videoGray)
@@ -105,8 +105,9 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
         imgColor = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
         cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
 
+        cv2.waitKey(50)
         # Return variables
-        return X,Y,Z, inbound
+        # return positions,inbound
 
 # This is a mock up of the real time loop for image processing
 def main():
@@ -119,10 +120,10 @@ def main():
     frameRight = None #cv2.imread(imageFilePath,1)
     
     # Testing - Manual Input of Images
-    cv2.imwrite("left.jpg", frameLeft)
-    cv2.imwrite("right.jpg", frameRight)
+    # cv2.imwrite("left.jpg", frameLeft)
+    # cv2.imwrite("right.jpg", frameRight)
+    positions,inbound = motionDetectionContours(frameLeft,frameRight,imageFrameWidthDimensions)
+    print(positions, inbound)
 
-    X,Y,Z,inbound = motionDetectionContours(frameLeft,frameRight,imageFrameWidthDimensions)
-    print(X,Y,Z, inbound)
 if __name__ == "__main__":
     main()

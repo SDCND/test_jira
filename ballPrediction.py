@@ -6,17 +6,19 @@
     For this file the ball trejectory will be predicted using the last three x,y,z location
     of the ball centeroid coming from the ball tracking file(function)
 '''
-from itertools import count
 import cv2
-import cvzone
-from cvzone.ColorModule import ColorFinder
 import numpy as np
 import math
+from findContours import findContours
+from colorFinder import ColorFinder
 
-cap = cv2.VideoCapture('videos/bounces/orangeBallBouncePingPongTable1.mov')
+path = 'videos/bounces/orangeBallBouncePingPongTable1.mov'
+path1 = 'videos/bounds/orangeBallMiddleBound2.mov'
+path2 = 'videos/bounds/orangeBallRightBound2.mov'
+cap = cv2.VideoCapture(path2)
 
 # Create the Color finder object
-myColorFinder = ColorFinder(False)
+myColorFinder = ColorFinder.ColorFinder(False)
 
 HSVOragneValue = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
 hsvVals = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
@@ -38,7 +40,7 @@ while True:
     # mask = cv2.dilate(mask,(5,5),iterations=3)
 
     # Find object external outline points
-    imgContours, contours = cvzone.findContours(img, mask, minArea=200)
+    imgContours, contours = findContours.findContours(img, mask, minArea=200)
 
     # Add the x and y centers of the ball in the two array list
     
