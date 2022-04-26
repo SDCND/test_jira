@@ -266,6 +266,7 @@ class MyApp(App):
         self.videoDisplay = VideoDisplayWidget(1, width=1225, height=480)
         # self.videoDisplay.style['margin'] = '10px'
     def main(self, name='world'):
+        pass
         # verticalContainer = gui.Container(width=1250, margin='0px auto', style={'display': 'block', 'overflow': 'hidden'})
         # horizontalContainer = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL, margin='0px', style={'display': 'block', 'overflow': 'auto'})
 
