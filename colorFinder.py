@@ -1,14 +1,18 @@
-"""
-Color Module
-Finds color in an image based on hsv values
-Can run as stand alone to find relevant hsv values
-"""
+'''
+ Author: Alejandro(Steven)
+ Date: April.25-2022
+ File Name: colorFinder.py
+ File Description: 
+    Finds color in an HSV image based on hsv values
+    This function uses color to create a mask of the ball
+    It has a debugger mode too that lets you custom fix the ball color
+'''
 
 import cv2
 import numpy as np
 import logging
 
-class ColorFinder:
+class colorFinder:
     def __init__(self, trackBar=False):
         self.trackBar = trackBar
         if self.trackBar:
@@ -73,6 +77,7 @@ class ColorFinder:
 
     def getColorHSV(self, myColor):
 
+        # Add White,Black, yellow, pink
         if myColor == 'red':
             output = {'hmin': 146, 'smin': 141, 'vmin': 77, 'hmax': 179, 'smax': 255, 'vmax': 255}
         elif myColor == 'green':
@@ -88,7 +93,7 @@ class ColorFinder:
 
 
 def main():
-    myColorFinder = ColorFinder(False)
+    myColorFinder = colorFinder(False)
     cap = cv2.VideoCapture(0)
     cap.set(3, 640)
     cap.set(4, 480)

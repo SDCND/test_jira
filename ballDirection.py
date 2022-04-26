@@ -15,6 +15,8 @@ This function was created to give the user a overall status of the ball
 direction. It returns an Array of booleans of the ball direction
 Arrary Order: [ ballLeftBound, ballBouncing, ballPeaking, ballFailing, ballRaising ]
 """
+import logging
+
 def ballState(positionListY, positionListX):
     currentPointY ,previousPointY ,oldestPointY = getPositions(positionListY)
     currentPointX ,previousPointX ,oldestPointX = getPositions(positionListX)    
@@ -26,8 +28,7 @@ def ballState(positionListY, positionListX):
     if previousPointX > currentPointX and previousPointX < oldestPointX:
         ballLeftBound = True
     else:
-        print("Ball status is undeterminable, inconclusive X-axis ball movenment")
-    
+        logging.warning("Ball status is undeterminable, inconclusive X-axis ball movenment")
     # Y-axis
     if previousPointY > currentPointY and previousPointY > oldestPointY:
         ballBouncing = True
@@ -40,12 +41,12 @@ def ballState(positionListY, positionListX):
     elif previousPointY > currentPointY and previousPointY < oldestPointY:
         ballRaising = True
     else:
-        print("Ball status is undeterminable, inconclusive Y-axis ball movenment")
+        logging.warning("Ball status is undeterminable, inconclusive Y-axis ball movenment")
     return ballStatus
 
 def getPositions(positionList):
     if len(positionList) < 3:
-        return print("Position list given has less than 3 positions, not enough data")
+        return logging.warning("Position list given has less than 3 positions, not enough data")
     currentPoint = positionList[-1]
     previousPoint = positionList[-2]
     oldestPoint = positionList[-3]

@@ -1,31 +1,35 @@
 '''
  Author: Alejandro(Steven)
- Date: April.20-2022
+ Date: April.26-2022
  File Name: ballAlgorithm2.py
  File Description: 
-    Using motion detection an image with only the objects that moved will be show in the new image.
-    With the use of findcontours the center of the ball will be used to ge the ball location in the image
+    Using colorfinder to get a image color mask with the use of findcontours the center of the
+    ball will be used to ge the ball location in the image. 
     Output the real world X,Y,& Z of the ball and if in or out of bound
 '''
 
 import cv2
 import numpy as np
 import math
-import motionDetection
+import colorFinder
 import globalVariables
 
-def algorithm2(frameLeft,frameRight,minArea,substractor):
-    # cornerAmount goes in function args
-    # :param cornerAmount: Filters based on the corner points e.g. 4 = Rectangle or square
-    
-    # Motion Detection
-    imgMotionDetectionLeft = motionDetection.motionDetection(frameLeft, substractor)
-    imgMotionDetectionRight = motionDetection.motionDetection(frameRight, substractor)
+def algorithm4(frameLeft,frameRight, ballColor,minArea,customColor=False):
+    # Color Finder 
+    HSVImageLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
+    HSVImageRight = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
 
+    if customColor:
+        myColorFinder = colorFinder(False)
+        HSVImageRight, colorMaskLeft = myColorFinder.update(HSVImageLeft, ballColor)
+        HSVImageRight, colorMaskRight = myColorFinder.update(HSVImageRight, ballColor)
+    else:
+        myColorFinder = myColorFinder(True)
+    
     # Contour Finder
     # Find object external outline points
-    imgContoursLeft, hierarchy = cv2.findContours(imgMotionDetectionLeft, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    imgContoursRight, hierarchy = cv2.findContours(imgMotionDetectionRight, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    imgContoursLeft, hierarchy = cv2.findContours(colorMaskLeft, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    imgContoursRight, hierarchy = cv2.findContours(colorMaskRight, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
     # Left contour iteration
     for contour in imgContoursLeft:
@@ -67,7 +71,7 @@ def algorithm2(frameLeft,frameRight,minArea,substractor):
     Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
 
     # Display
-    cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)
-    cv2.imshow("imgMotionDetectionRight", imgMotionDetectionRight)
+    cv2.imshow("colorMaskLeft", colorMaskLeft)
+    cv2.imshow("colorMaskRight", colorMaskRight)
 
     return X,Y,Z

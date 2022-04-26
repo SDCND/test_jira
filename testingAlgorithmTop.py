@@ -9,12 +9,16 @@
 
 from itertools import count
 from multiprocessing.connection import wait
+
 import cv2
 import math
-from cv2 import imshow
 import numpy as np
+
 import algorithm1
 import algorithm2
+# import algorithm3
+import algorithm4
+
 import ballDirection
 import globalVariables
 
@@ -53,6 +57,9 @@ def main():
     # Testing Numbers
     imageFrameWidthDimensions = 2436 #4k
     videoMode = True
+    colorFinderMaunal = False
+    
+    myColorFinder = c
 
     if videoMode: # Video Mode
         # Create a background substarctor
@@ -92,11 +99,18 @@ def main():
         pathRight2 = 'testImages/right5.jpg'
         frameLeftGray = cv2.imread(pathLeft2, cv2.IMREAD_GRAYSCALE)
         frameRightGray = cv2.imread(pathRight2, cv2.IMREAD_GRAYSCALE)
-        
-        # Algorithm 1 Testing
-        X,Y,Z = algorithm1.algorithm1(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
-        # Algorithm 2 Testing
+
+        # Motion Detection        
+        # Algorithm 1 Testing - Blob Detector
+        # X,Y,Z = algorithm1.algorithm1(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+        # Algorithm 2 Testing - Contour Finder
         X,Y,Z = algorithm2.algorithm2(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+
+        # Color Finder
+        # Algorithm 1 Testing - Blob Detector
+        # X,Y,Z = algorithm3.algorithm3(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+        # # Algorithm 2 Testing - Contour Finder
+        # X,Y,Z = algorithm4.algorithm4(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
 
         globalVariables.posListX.append(X)
         globalVariables.posListY.append(Y)

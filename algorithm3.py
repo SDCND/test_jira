@@ -9,17 +9,21 @@
 import cv2
 import numpy as np
 import math
-import motionDetection
+import colorFinder
 import globalVariables
 
-# Completed
-# ******* Testing Requuired ************
+def algorithm1(frameLeft,frameRight,ballColor,minArea,customColor=False):
+    # Color Finder 
+    HSVImageLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
+    HSVImageRight = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
 
-def algorithm1(frameLeft,frameRight,minArea,substractor):
-    # Motion Detection
-    imgMotionDetectionLeft = motionDetection.motionDetection(frameLeft, substractor)
-    imgMotionDetectionRight = motionDetection.motionDetection(frameRight, substractor)
-    
+    if customColor:
+        myColorFinder = colorFinder(False)
+        HSVImageRight, colorMaskLeft = myColorFinder.update(HSVImageLeft, ballColor)
+        HSVImageRight, colorMaskRight = myColorFinder.update(HSVImageRight, ballColor)
+    else:
+        myColorFinder = myColorFinder(True)
+        
     # Blob detector
     # Setup SimpleBlobDetector parameters.
     params = cv2.SimpleBlobDetector_Params()
@@ -52,8 +56,8 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     detector = cv2.SimpleBlobDetector_create(params)
 
     # Detect blobs from the images
-    keypointsLeft = detector.detect(imgMotionDetectionLeft)
-    keypointsRight = detector.detect(imgMotionDetectionRight)
+    keypointsLeft = detector.detect(colorMaskLeft)
+    keypointsRight = detector.detect(colorMaskRight)
 
     #Finding the center of the Blob
     xLeft = keypointsLeft[0].pt[0]
@@ -77,7 +81,7 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
     
     # Display
-    cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)
-    cv2.imshow("imgMotionDetectionRight", imgMotionDetectionRight)
+    cv2.imshow("colorMaskLeft", colorMaskLeft)
+    cv2.imshow("colorMaskRight", colorMaskRight)
     
     return X,Y,Z

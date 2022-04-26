@@ -7,6 +7,9 @@
         is in or out of bounds
 """
 
+# Completed
+# Needs Testing
+
 def inBounds(X,Z,boundCorners):
     # bound corners: BottomRight, BottomLeft, TopLeft, TopRight
     # ((x1,y1), (x2,y2), ,(x3,y3) , (x4,y4))

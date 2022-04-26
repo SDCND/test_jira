@@ -24,7 +24,7 @@ def algorithm2(imgLeft,imgRight):
     path4 = 'testvideos/R2L.mp4'
     cap = cv2.VideoCapture(0)
     posListX, posListY, positions = [], [], []
-    xList = [item for item in range(0, imageFrameWidthDimensions)]
+    xList = [item for item in range(0, 3840 )] # imageFrameWidthDimensions = 752, 4K 3840 
 
     PingPongBallDiameter = 4 # cm (1.57in)
     TenniseBallDiameter = 6.86 # cm (2.7in)
