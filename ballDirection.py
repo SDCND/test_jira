@@ -10,13 +10,14 @@
         Using OpenCV x,y coordinate system, where Top left of the image is 0,0
 '''
 
+import logging
+
+
 """
 This function was created to give the user a overall status of the ball
 direction. It returns an Array of booleans of the ball direction
 Arrary Order: [ ballLeftBound, ballBouncing, ballPeaking, ballFailing, ballRaising ]
 """
-import logging
-
 def ballState(positionListY, positionListX):
     currentPointY ,previousPointY ,oldestPointY = getPositions(positionListY)
     currentPointX ,previousPointX ,oldestPointX = getPositions(positionListX)    
