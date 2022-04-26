@@ -59,8 +59,6 @@ def main():
     videoMode = True
     colorFinderMaunal = False
     
-    myColorFinder = c
-
     if videoMode: # Video Mode
         # Create a background substarctor
         # Takes first frame as empty iamge, first frame will always be without the ball
