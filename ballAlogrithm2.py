@@ -22,7 +22,7 @@ def algorithm2(imgLeft,imgRight,imageFrameWidthDimensions):
     path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
     path3 = 'testvideos/L2R.mp4'
     path4 = 'testvideos/R2L.mp4'
-    cap = cv2.VideoCapture(path4)
+    cap = cv2.VideoCapture(0)
     posListX, posListY, positions = [], [], []
     xList = [item for item in range(0, imageFrameWidthDimensions)]
 
