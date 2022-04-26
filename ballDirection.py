@@ -1,8 +1,6 @@
 # Use OpenCV x,y coordinate system
 # Top left is 0,0
 
-from turtle import left
-
 
 def getPositions(positionList):
     if len(positionList) < 3:
@@ -12,22 +10,20 @@ def getPositions(positionList):
     oldestPoint = positionList[-3]
     return currentPoint,previousPoint,oldestPoint
 
-# def ballState(positionListY, positionListX):
-#     currentPointY ,previousPointY ,oldestPointY = getPositions(positionListY)
-#     currentPointX ,previousPointX ,oldestPointX = getPositions(positionListX)
+def ballState(positionListY, positionListX):
+    currentPointY ,previousPointY ,oldestPointY = getPositions(positionListY)
+    currentPointX ,previousPointX ,oldestPointX = getPositions(positionListX)
     
-#     ballLeftBound = ballLeftBound(currentPointX ,previousPointX ,oldestPointX)
+    ballLeftBound = ballLeftBound(currentPointX ,previousPointX ,oldestPointX)
     
-#     if ballFalling(currentPointY ,previousPointY ,oldestPointY):
-#         return ballLeftBound, True
-#     if ballRaising(currentPointY ,previousPointY ,oldestPointY):
-#         return ballLeftBound, True
-#     if ballBouncing(currentPointY ,previousPointY ,oldestPointY):
-#         return ballLeftBound, True
-#     else:
-#         return ballLeftBound
-    
-
+    if ballFalling(currentPointY ,previousPointY ,oldestPointY):
+        return ballLeftBound, True
+    if ballRaising(currentPointY ,previousPointY ,oldestPointY):
+        return ballLeftBound, True
+    if ballBouncing(currentPointY ,previousPointY ,oldestPointY):
+        return ballLeftBound, True
+    else:
+        return ballLeftBound
 
 def ballBouncing(currentPoint,previousPoint,oldestPoint):
     ballBounce = False
@@ -58,14 +54,3 @@ def ballLeftBound(currentPoint,previousPoint,oldestPoint):
     if previousPoint > currentPoint and previousPoint < oldestPoint:
         ballLeftBound = True
     return ballLeftBound
-
-def ballBouncing1(positionListY):
-    ballBounce = False
-    if len(positionListY) < 3:
-        return print("Position List has less than Three positions")
-    currentPoint = positionListY[-1]
-    previousPoint = positionListY[-2]
-    oldestPoint = positionListY[-3]
-    if previousPoint > currentPoint and previousPoint > oldestPoint:
-        ballBounce = True
-    return ballBounce

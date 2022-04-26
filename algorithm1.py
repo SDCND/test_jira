@@ -8,6 +8,7 @@
 '''
 import cv2
 # Completed
+# ******* Testing Requuired ************
 
 def algorithm1(frameLeft,frameRight,minArea):
     # Motion Detection masks
@@ -59,6 +60,7 @@ def algorithm1(frameLeft,frameRight,minArea):
     yRight = keypointsRight[0].pt[1]
 
     #*************** Hard Code Numbers From Intrinsic ***********
+    #************ Gobal Variables*******
     #************ Temp*******
     imageWidth = 752 # cxLeft width
     imageHeight = 480 # cyLeft height
