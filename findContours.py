@@ -29,7 +29,7 @@ def findContours(img, imgPre, minArea=1000, sort=True, filter=0, drawCon=True, c
         if area > minArea:
             peri = cv2.arcLength(cnt, True)
             approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
-            # print(len(approx))
+            # Draw rectangle and centroid of the contour            
             if len(approx) == filter or filter == 0:
                 if drawCon: cv2.drawContours(imgContours, cnt, -1, c, 3)
                 x, y, w, h = cv2.boundingRect(approx)

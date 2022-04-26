@@ -9,15 +9,15 @@ File Description:
 # imports
 import cv2
 import numpy as np
-from frameGrabber import ImageFeedthrough
+# from frameGrabber import ImageFeedthrough
 
-global camera
-camera = ImageFeedthrough()
+# global camera
+# camera = ImageFeedthrough()
 
-time.sleep(1)
-frameLeft,frameRight = camera.getStereoRGB()
-cv2.imwrite("left.jpg", frameLeft)
-cv2.imwrite("right.jpg", frameRight)
+# time.sleep(1)
+# # frameLeft,frameRight = camera.getStereoRGB()
+# cv2.imwrite("left.jpg", frameLeft)
+# cv2.imwrite("right.jpg", frameRight)
 
 # Setup SimpleBlobDetector parameters.
 params = cv2.SimpleBlobDetector_Params()

@@ -11,20 +11,31 @@
 import cv2
 import numpy as np
 import math
-from findContours import findContours
+import findContours
+import ballDirection
 
-def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
+def algorithm2(imgLeft,imgRight,imageFrameWidthDimensions):
     # Testing - Taking in a video for now
     # cap = cv2.VideoCapture(0)
-    path = 'videos/bounces/orangeBallBouncePingPongTable1.mov'
-    path1 = 'videos/bounds/orangeBallMiddleBound2.mov'
-    path2 = 'videos/bounds/orangeBallRightBound2.mov'
-    cap = cv2.VideoCapture(path2)
+    path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
+    path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
+    path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
+    path3 = 'testvideos/L2R.mp4'
+    path4 = 'testvideos/R2L.mp4'
+    cap = cv2.VideoCapture(path4)
     posListX, posListY, positions = [], [], []
     xList = [item for item in range(0, imageFrameWidthDimensions)]
 
-    substractor = cv2.createBackgroundSubtractorMOG2()
+
+    PingPongBallDiameter = 4 # cm (1.57in)
+    TenniseBallDiameter = 6.86 # cm (2.7in)
+    racquetballDiameter = 5.715 # cm (2.25in)
+    # soccerBallDiameter = 24.26 # cm (9.23in)
+    # basketballDiameter = 22 # cm (8.66in)
     
+    ballRadius = (PingPongBallDiameter)/2
+    substractor = cv2.createBackgroundSubtractorMOG2()
+    counter = 0
     inbound = True
     while True:
         success, video = cap.read()
@@ -34,18 +45,23 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
         imgMotionDetection = substractor.apply(videoGray)
 
         # Find object external outline points
-        imgContours, contours = cvzone.findContours(videoGray, imgMotionDetection, minArea=1000)
-
-        # Add the x and y centers of the ball in the two array list
+        imgContours, contours = findContours.findContours(videoGray, imgMotionDetection, minArea=1000)
 
         if contours:
-            posListX.append(contours[0]['center'][0])
-            posListY.append(contours[0]['center'][1])
+            if ballDirection.ballBouncing1(posListY) == True:
+                posListX = posListX[len(posListX)-2:]
+                posListY = posListY[len(posListY)-2:]
+            if counter != 0:
+                posListX.append(contours[0]['center'][0])
+                posListY.append(contours[0]['center'][1])
+            counter += 1
+            pass
         if posListX:
             # Testing - Getting rid of bad first ball read
-            print(posListX)
             # del posListX[0]
             # del posListY[0]
+
+            # print(posListX)
 
             # Polynomial Regression y = Ax^2 + Bx + C
             # Find the Coefficients
@@ -72,7 +88,7 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 b = B
                 c = C - 590
     
-                x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
+                # x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
     
                 prediction = 330 < x < 430
                 # Covernting Camera to Real World
@@ -96,13 +112,13 @@ def motionDetectionContours(imgLeft,imgRight,imageFrameWidthDimensions):
                 X = (Z * (xLeft-cxLeft)*pixelSize)/f
                 Y = (Z * (yLeft-cyLeft)*pixelSize)/f
                 frame = [X, Y, Z]
-                positions.append(frame)
+                positions.append(frame) 
         # Display
         # videoGray = cv2.resize(videoGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
         # cv2.imshow("Video Gray",videoGray)
-        imgMotionDetection = cv2.resize(imgMotionDetection, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+        imgMotionDetection = cv2.resize(imgMotionDetection, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
         cv2.imshow("Motion Detection", imgMotionDetection)
-        imgColor = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+        imgColor = cv2.resize(imgContours, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
         cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
 
         cv2.waitKey(50)
@@ -122,7 +138,7 @@ def main():
     # Testing - Manual Input of Images
     # cv2.imwrite("left.jpg", frameLeft)
     # cv2.imwrite("right.jpg", frameRight)
-    positions,inbound = motionDetectionContours(frameLeft,frameRight,imageFrameWidthDimensions)
+    positions,inbound = algorithm2(frameLeft,frameRight,imageFrameWidthDimensions)
     print(positions, inbound)
 
 if __name__ == "__main__":

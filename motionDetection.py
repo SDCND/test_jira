@@ -19,6 +19,7 @@ while True:
     
     imgMotionDetection = substractor.apply(videoGray)
     
+    # Using several Filters instead
     # _, mask = cv2.threshold(videoGray,100,255,cv2.THRESH_BINARY)
     # mask =  cv2.GaussianBlur(mask,(5,5),0)
     # mask = cv2.erode(mask, None, iterations=2)

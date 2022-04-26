@@ -3,6 +3,7 @@
 """
 A simple echo client
 """
+from base64 import encode
 import struct
 import socket
 #electrode_data = [0.0, 0.0, 0.2, 0.2, -0.01, 0.0, 0.0, 0.0]
@@ -25,7 +26,15 @@ host = '68.180.86.216'
 port = 55001
 size = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) UDP
 s.connect((host,port))
+
+# Alejandros Method
+
+serverAddressPort = (host,port)
+data = '1,2'
+data = str.encode(str(data))
+s.sendto(data,serverAddressPort)
 
 #values = (0.0, 0.0, x, y, z, 0.0, 0.0, 0.0)
 values = (0.0, 0.0, 0.2, -0.01, 0.2, 0.0, 0.0, 0.0)
