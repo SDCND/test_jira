@@ -9,6 +9,7 @@
 import cv2
 import numpy as np
 import motionDetection
+import globalVariables
 # Completed
 # ******* Testing Requuired ************
 
@@ -62,15 +63,6 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     # Displaying
     blobs = cv2.drawKeypoints(frameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     blobs = cv2.drawKeypoints(frameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
-    #*************** Hard Code Numbers From Intrinsic ***********
-    #************ Gobal Variables*******
-    #************ Temp*******
-    imageWidth = 752 # cxLeft width
-    imageHeight = 480 # cyLeft height
-    b = 60; # baseline [mm]
-    f = 6; # focal length [mm]
-    pixelSize = .006; # pixel size [mm]
     
     xLeft = float(xLeft)
     yLeft = float(yLeft)
@@ -78,9 +70,9 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     yLeft = float(yRight)
     centerxLeft = float(xLeft/2)
     centerxRight = float(xRight/2)
-    Z = (b * f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*pixelSize)
-    X = (Z * (xLeft-imageWidth)*pixelSize)/f
-    Y = (Z * (yLeft-imageHeight)*pixelSize)/f
+    Z = ((globalVariables.b * globalVariables.f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*globalVariables.pixelSize))/10
+    X = ((Z * (xLeft-globalVariables.imageWidth)*globalVariables.pixelSize)/globalVariables.f)/10
+    Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
     
     # Display
     cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)
