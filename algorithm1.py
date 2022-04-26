@@ -7,14 +7,15 @@
     blobdection to find the ball in the image. Output real world X, Y, Z
 '''
 import cv2
+import numpy as np
 import motionDetection
 # Completed
 # ******* Testing Requuired ************
 
 def algorithm1(frameLeft,frameRight,minArea,substractor):
-    
-    imgMotionDetectionLeft = motionDetection(frameLeft, substractor)
-    imgMotionDetectionRight = motionDetection(frameRight, substractor)
+    # Motion Detection
+    imgMotionDetectionLeft = motionDetection.motionDetection(frameLeft, substractor)
+    imgMotionDetectionRight = motionDetection.motionDetection(frameRight, substractor)
     
     # Blob detector
     # Setup SimpleBlobDetector parameters.
@@ -58,6 +59,10 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     xRight = keypointsRight[0].pt[0]
     yRight = keypointsRight[0].pt[1]
 
+    # Displaying
+    blobs = cv2.drawKeypoints(frameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    blobs = cv2.drawKeypoints(frameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
     #*************** Hard Code Numbers From Intrinsic ***********
     #************ Gobal Variables*******
     #************ Temp*******
@@ -76,5 +81,9 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     Z = (b * f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*pixelSize)
     X = (Z * (xLeft-imageWidth)*pixelSize)/f
     Y = (Z * (yLeft-imageHeight)*pixelSize)/f
+    
+    # Display
+    cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)
+    cv2.imshow("imgMotionDetectionRight", imgMotionDetectionRight)
     
     return X,Y,Z

@@ -27,7 +27,10 @@ def findContours(img, imgPre, minArea=1000, sort=True, filter=0, drawCon=True, c
     for cnt in contours:
         area = cv2.contourArea(cnt)
         if area > minArea:
+            # Get Perimeter of closed contours
             peri = cv2.arcLength(cnt, True)
+            # It approximates a contour shape to another shape with less number of 
+            # vertices depending upon the precision we specify
             approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
             # Draw rectangle and centroid of the contour            
             if len(approx) == filter or filter == 0:

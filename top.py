@@ -51,6 +51,9 @@ def main():
     minArea = 1000
     posListX, posListY = [], []
     
+    # Create a background substarctor
+    substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+    
     print("Before Initiailization")
     simulinkInitialize = True
     if  simulinkInitialize == True:

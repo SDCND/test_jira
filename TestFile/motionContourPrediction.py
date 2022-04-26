@@ -26,7 +26,6 @@ def algorithm2(imgLeft,imgRight):
     posListX, posListY, positions = [], [], []
     xList = [item for item in range(0, imageFrameWidthDimensions)]
 
-
     PingPongBallDiameter = 4 # cm (1.57in)
     TenniseBallDiameter = 6.86 # cm (2.7in)
     racquetballDiameter = 5.715 # cm (2.25in)

@@ -13,13 +13,16 @@ cap = cv2.VideoCapture(path)
 
 substractor = cv2.createBackgroundSubtractorMOG2()
 
+# Define GoodFeatureToTrack()
+featureParameters = dict(maxcorners=100,qualityLevel=.6,minDistance=25,blockSize=9)
+
 while True:
-    success, video = cap.read()
+    success, imageColor = cap.read()
     kernal = np.ones((5,5),np.uint8)
     
-    videoGray = cv2.cvtColor(video,cv2.COLOR_BGR2GRAY)
+    imageGray = cv2.cvtColor(imageColor,cv2.COLOR_BGR2GRAY)
     
-    imgMotionDetection = substractor.apply(videoGray)
+    imgMotionDetection = substractor.apply(imageGray)
     
     imgMorphology = cv2.morphologyEx(imgMotionDetection, cv2.MORPH_OPEN, kernal)
     
@@ -30,14 +33,18 @@ while True:
     # mask = cv2.dilate(mask, None, iterations=2)
     # ImgMotionDetectionManual = cv2.absdiff(firstFrameGray,imgGray)
 
-    videoGray = cv2.resize(videoGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("Video Gray",videoGray)
+    imageColor = cv2.resize(imageColor, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    cv2.imshow("Video Color",imageColor)
+    
+    imageGray = cv2.resize(imageGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    cv2.imshow("Video Gray",imageGray)
     
     imgMotionDetection = cv2.resize(imgMotionDetection, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
     cv2.imshow("Motion Detection", imgMotionDetection)
     
     imgMorphology = cv2.resize(imgMorphology, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
     cv2.imshow("Morphology", imgMorphology)
+    
 
     if cv2.waitKey(1) and 0xFF == ord('q'):
         break
