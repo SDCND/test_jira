@@ -12,7 +12,8 @@ import math
 Needs to get the region you are interested in to tell you the
 prediction results
 '''
-def ballPrediction(positionListX,positionListY, bounds):
+
+def ballPrediction(positionListX,positionListY, courtBounds):
     degreeOfAccuracy = 10
     if positionListX:
         # Ball Prediction

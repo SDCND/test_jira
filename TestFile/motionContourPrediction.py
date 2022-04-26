@@ -14,7 +14,7 @@ import math
 import findContours
 import ballDirection
 
-def algorithm2(imgLeft,imgRight,imageFrameWidthDimensions):
+def algorithm2(imgLeft,imgRight):
     # Testing - Taking in a video for now
     # cap = cv2.VideoCapture(0)
     path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
