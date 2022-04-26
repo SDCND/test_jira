@@ -145,7 +145,8 @@ def courtCreation():
             X = X/1000.0
             Y = Y/1000.0
             Z = Z/1000.0
-        
+
+            # Adding X,Y,Z to pose
             # since this vector will be multiplied by a 4x4 pose matrix a 1 must be appended to it
             camPt = np.array([X,Y,Z,1]).T
         
@@ -163,7 +164,8 @@ def courtCreation():
             rotMatRight = rightPose[0][0:3,0:3]       # slice out the 3x3 rotation matrix from the 4x4 matrix
             rvecRight,_ = cv2.Rodrigues(rotMatRight)  # convert 3x3 rotation matrix to rotation vector
             tvecRight = rightPose[0][0:3,3]           # slice out the 3x1 translation vector
-        
+
+            # Court Creation - plot court bounds based on user specification
             # plot court bounds based on user specification
             if (court == True):
                 #Plot doubles rectangle for court
