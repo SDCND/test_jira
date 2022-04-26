@@ -12,12 +12,12 @@ import cv2
 import numpy as np
 import math
 import ballDirection
+import motionDetection
 
-def algorithm2(frameLeft,frameRight,minArea):
-    substractor = cv2.createBackgroundSubtractorMOG2()
+def algorithm2(frameLeft,frameRight,minArea, substractor):
 
-    imgMotionDetectionLeft = substractor.apply(frameLeft)
-    imgMotionDetectionRight = substractor.apply(frameRight)
+    imgMotionDetectionLeft = motionDetection(frameLeft, substractor)
+    imgMotionDetectionRight = motionDetection(frameRight, substractor)
 
     # Find object external outline points
     imgContoursLeft, hierarchy = cv2.findContours(imgMotionDetectionLeft, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
@@ -43,6 +43,15 @@ def algorithm2(frameLeft,frameRight,minArea):
     
     xRight = keypointsRight[0].pt[0]
     yRight = keypointsRight[0].pt[1]
+
+    #*************** Hard Code Numbers From Intrinsic ***********
+    #************ Gobal Variables*******
+    #************ Temp*******
+    imageWidth = 752 # cxLeft width
+    imageHeight = 480 # cyLeft height
+    b = 60; # baseline [mm]
+    f = 6; # focal length [mm]
+    pixelSize = .006; # pixel size [mm]
 
     xLeft = float(xLeft)
     yLeft = float(yLeft)

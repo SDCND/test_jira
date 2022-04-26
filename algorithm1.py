@@ -7,15 +7,14 @@
     blobdection to find the ball in the image. Output real world X, Y, Z
 '''
 import cv2
+import motionDetection
 # Completed
 # ******* Testing Requuired ************
 
-def algorithm1(frameLeft,frameRight,minArea):
-    # Motion Detection masks
-    substractor = cv2.createBackgroundSubtractorMOG2()
-
-    imgMotionDetectionLeft = substractor.apply(frameLeft)
-    imgMotionDetectionRight = substractor.apply(frameRight)
+def algorithm1(frameLeft,frameRight,minArea,substractor):
+    
+    imgMotionDetectionLeft = motionDetection(frameLeft, substractor)
+    imgMotionDetectionRight = motionDetection(frameRight, substractor)
     
     # Blob detector
     # Setup SimpleBlobDetector parameters.
