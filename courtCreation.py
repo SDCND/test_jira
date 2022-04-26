@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import apriltag
 
-def aprilTag():  
+def courtCreation():
     path4 = 'testvideos/testDJM.mov'
     court = True
     cap = cv2.VideoCapture(path4)

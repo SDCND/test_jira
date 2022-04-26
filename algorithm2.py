@@ -11,7 +11,6 @@
 import cv2
 import numpy as np
 import math
-import findContours
 import ballDirection
 
 def algorithm2(frameLeft,frameRight,minArea):

@@ -1,45 +1,106 @@
+'''
+ Author: Alejandro(Steven)
+ Date: April.20-2022
+ File Name: top.py
+ File Description: 
+    This file will be running all of the functions to have a real time ball tracking
+    system that will output in or out of bounds. 
+'''
+
+from itertools import count
 import cv2
+import math
+from cv2 import imshow
 import numpy as np
+from algorithm1 import algorithm1
 
-#*************** Hard Code Numbers From Intrinsic ***********
-# Covernting Camera to Real World
-imageWidth = 752 # cxLeft width
-imageHeight = 480 # cyLeft height
-b = 60; # baseline [mm]
-f = 6; # focal length [mm]
-pixelSize = .006; # pixel size [mm]
+# VHDL
+# import frameGrabber
+from frameGrabber import ImageFeedthrough
+from frameGrabber import ImageProcessing
+import struct
+import mmap
 
-PingPongBallDiameter = 4 # cm (1.57in)
-TenniseBallDiameter = 6.86 # cm (2.7in)
-racquetballDiameter = 5.715 # cm (2.25in)
-# soccerBallDiameter = 24.26 # cm (9.23in)
-# basketballDiameter = 22 # cm (8.66in)
+import time
 
-ballRadius = (PingPongBallDiameter)/2
+# Board doesn't have file yet 
+# from inOutBounds import inBounds
+""""
+import io
+import cv2
+import remi.gui as gui
+from remi import start, App
 
-xList = [item for item in range(0, imageFrameWidthDimensions)]
-posListX, posListY, positions = [], [], []
+import logging
+import numpy as np
+import mmap
+import struct
+import sys, random
+import ctypes
+import copy
+import os
+"""
+# import apriltag
 
-if contours:
-    if ballDirection.ballBouncing1(posListY) == True:
-        posListX = posListX[len(posListX)-2:]
-        posListY = posListY[len(posListY)-2:]
-    if counter != 0:
-        posListX.append(contours[0]['center'][0])
-        posListY.append(contours[0]['center'][1])
-    counter += 1
-    pass
+# def realTimeTracker(frameLeftRGB,frameRightRGB,frameLeftGray,frameRightGray,minArea):
+#     return inBounds
 
-# Create the dot of the Center of the ball
-for x in xList:
-    y = int(A * x ** 2 + B * x + C)
-    cv2.circle(imgContours, (x, y), 2, (255, 0, 255), cv2.FILLED)
+def main():
+    # Testing Numbers
+    imageFrameWidthDimensions = 2436 #4k
+    minArea = 1000
+    posListX, posListY = [], []
     
-# Draws the line and dot of the centroid of the ball
-for imageFrame, (posX, posY) in enumerate(zip(posListX, posListY)):
-    pos = (posX, posY)
-    cv2.circle(imgContours, pos, 10, (0, 255, 0), cv2.FILLED)
-    if imageFrame == 0:
-        cv2.line(imgContours, pos, pos, (0, 255, 0), 5)
-    else:
-        cv2.line(imgContours, pos, (posListX[imageFrame - 1], posListY[imageFrame - 1]), (0, 255, 0), 5)
+    print("Before Initiailization")
+    simulinkInitialize = True
+    if  simulinkInitialize == True:
+        print("init")
+        f1 = open("/dev/mem", "r+b")
+        simulinkMem = mmap.mmap( f1.fileno(), 1000, offset=0x81200000)
+        simulinkMem.seek(0) 
+        simulinkMem.write(struct.pack('l', 1))       # reset IP core
+        simulinkMem.seek(8)                         
+        simulinkMem.write(struct.pack('l', 752))     # image width
+        simulinkMem.seek(12)                        
+        simulinkMem.write(struct.pack('l', 480))     # image height
+        simulinkMem.seek(16)                        
+        simulinkMem.write(struct.pack('l', 0))       # zero horizontal porch
+        simulinkMem.seek(20)                        
+        simulinkMem.write(struct.pack('l', 0))       # zero vertical porch
+        simulinkMem.seek(256) 
+        simulinkMem.write(struct.pack('l', 255))  # coeff 1
+        simulinkMem.write(struct.pack('l', 255))  # coeff 2
+        simulinkMem.write(struct.pack('l', 255))  # coeff 3
+        simulinkMem.seek(4) 
+        simulinkMem.write(struct.pack('l', 1))       # enable IP core
+    print("After Initiailization")
+    
+    # Clear Image
+    global cameraFeedthrough
+    cameraFeedthrough = ImageFeedthrough()
+    # Clean Filtered Image
+    global cameraProcessing
+    cameraProcessing = ImageProcessing()
+     
+    # Have a boolean to change between RGB or GRay if desired
+    frameLeftRGB,frameRightRGB = cameraFeedthrough.getStereoRGB()
+
+    frameLeftGray,frameRightGray = cameraFeedthrough.getStereoGray()
+    
+    print("Before While")
+    
+    count = 0
+    while count < 2:
+        # Display Video Feed
+        cv2.imwrite("frameLeftRGB%s.jpg" % count, frameLeftRGB)
+        cv2.imwrite("frameRightRGB%s.jpg" % count, frameRightRGB)
+        cv2.imwrite("frameLeftGray%s.jpg" % count, frameLeftGray)
+        cv2.imwrite("frameRightGray%s.jpg" % count, frameRightGray)
+        count += 1
+        # X,Y,Z = algorithm1(frameLeftGray,frameRightGray,minArea)
+        # posListX.append(X)
+        # posListY.append(Y)
+        # print(X,Y,Z)
+
+if __name__ == "__main__":
+    main()

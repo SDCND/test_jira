@@ -6,7 +6,7 @@
     Uses motion detection to find object moving in the image then uses
     blobdection to find the ball in the image. Output real world X, Y, Z
 '''
-
+import cv2
 # Completed
 
 def algorithm1(frameLeft,frameRight,minArea):
@@ -58,6 +58,14 @@ def algorithm1(frameLeft,frameRight,minArea):
     xRight = keypointsRight[0].pt[0]
     yRight = keypointsRight[0].pt[1]
 
+    #*************** Hard Code Numbers From Intrinsic ***********
+    #************ Temp*******
+    imageWidth = 752 # cxLeft width
+    imageHeight = 480 # cyLeft height
+    b = 60; # baseline [mm]
+    f = 6; # focal length [mm]
+    pixelSize = .006; # pixel size [mm]
+    
     xLeft = float(xLeft)
     yLeft = float(yLeft)
     xRight = float(xRight)
