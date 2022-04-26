@@ -47,9 +47,8 @@ while True:
 
     # Add the x and y centers of the ball in the two array list
     
-    ballBounce = ballDirection.ballDirection(posListY)
     if contours:
-        if ballBounce == True:
+        if ballDirection.ballBouncing1(posListY) == True:
             posListX = posListX[len(posListX)-2:]
             posListY = posListY[len(posListY)-2:]
         if counter != 0:
@@ -84,21 +83,21 @@ while True:
             b = B
             c = C - 590
             # Still need to do the ball radius landing
-            x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
+            # x = int((-b - math.sqrt(b ** 2 - (4 * a * c))) / (2 * a))
             prediction = 330 < x < 430
         # Text Showing Prediction
-        if prediction:
-            cvzone.putTextRect(imgContours, "In Bound", (50, 150), colorR=(0, 200, 0),
-                                scale=5, thickness=10, offset=20)
-        else:
-            cvzone.putTextRect(imgContours, "Out Bound", (50, 150), colorR=(0, 0, 200),
-                                scale=5, thickness=10, offset=20)
+        # if prediction:
+        #     cvzone.putTextRect(imgContours, "In Bound", (50, 150), colorR=(0, 200, 0),
+        #                         scale=5, thickness=10, offset=20)
+        # else:
+        #     cvzone.putTextRect(imgContours, "Out Bound", (50, 150), colorR=(0, 0, 200),
+        #                         scale=5, thickness=10, offset=20)
  
     # Display
-    img = cv2.resize(mask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    img = cv2.resize(mask, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
     cv2.imshow("Image", img) # Makes the img appear on new window
 
-    imgColor = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    imgColor = cv2.resize(imgContours, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
     cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
 
     cv2.waitKey(50) #Change the FPS for user sight only
