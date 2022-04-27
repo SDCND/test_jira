@@ -21,6 +21,9 @@ import algorithm4
 import ballDirection
 import globalVariables
 
+import struct
+import socket
+
 # VHDL
 # import frameGrabber
 # from frameGrabber import ImageFeedthrough
@@ -70,6 +73,13 @@ def main():
         path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
         videoLeftGray = cv2.VideoCapture(pathLeft) # Gets Video
         videoRightGray = cv2.VideoCapture(pathRight) # Gets Video
+        
+        #connect to socket server. Unity Server
+        host = '68.180.86.216'  #change to your PC's IPv4 Address from ipcongif in CMD
+        port = 55001            #do not change port, it is hard coded into the unity server C# file
+        size = 1024
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host,port))
 
         while True:
             # Video Mode
@@ -78,13 +88,18 @@ def main():
 
             # Algorithm 1 Testing
             # X,Y,Z = algorithm1.algorithm1(frameLeftGray,frameRightGray,minArea,substractor)
-            #Algorithm 2 Testing
+            # Algorithm 2 Testing
             X,Y,Z = algorithm2.algorithm2(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
 
             globalVariables.posListX.append(X)
             globalVariables.posListY.append(Y)
             
             # Debugging
+            # Pack X, Y, Z values into a byte array
+            values = (0.0, 0.0, X, Y, Z, 0.0, 0.0, 0.0)
+            packer = struct.Struct('f f f f f f f f')
+            packed_data = packer.pack(*values)
+            s.send(packed_data) #send byte array to Unity server.
             print(X,Y,Z)
             cv2.imshow("FrameLeft", frameLeftGray)
             cv2.imshow("FrameRight", frameRightGray)
