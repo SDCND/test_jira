@@ -58,58 +58,68 @@ import os
 def main():
     # Testing Numbers
     imageFrameWidthDimensions = 2436 #4k
-    videoMode = False
+    videoMode = True
     colorFinderMaunal = False
     ballColor = "orange"
+
+    # Create a background substarctor
+    # Takes first frame as empty iamge, first frame will always be without the ball
+    substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+    kernal = np.ones((5,5),np.uint8)
     
     if videoMode: # Video Mode
-        # Create a background substarctor
-        # Takes first frame as empty iamge, first frame will always be without the ball
-        substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
 
-        pathLeft = 'testvideos/testDJM.mov'
-        pathRight = 'testvideos/testDJM.mov'
         path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
-        path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
-        videoLeftGray = cv2.VideoCapture(pathLeft) # Gets Video
-        videoRightGray = cv2.VideoCapture(pathRight) # Gets Video
+        path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
+        path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
+        path3 = 'testvideos/testDJM.mov'
         
-        #connect to socket server. Unity Server
-        host = '68.180.86.216'  #change to your PC's IPv4 Address from ipcongif in CMD
-        port = 55001            #do not change port, it is hard coded into the unity server C# file
-        size = 1024
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((host,port))
+        videoLeft = cv2.VideoCapture(path2) # Gets Video
+        videoRight = cv2.VideoCapture(path2) # Gets Video
+        
+        # #connect to socket server. Unity Server
+        # host = '68.180.86.216'  #change to your PC's IPv4 Address from ipcongif in CMD
+        # port = 55001            #do not change port, it is hard coded into the unity server C# file
+        # size = 1024
+        # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # s.connect((host,port))
 
-        while True:
-            # Video Mode
-            success, frameLeftGray = videoLeftGray.read()
-            success, frameRightGray = videoRightGray.read()
+        while True: # Video Mode
+            success, frameLeft = videoLeft.read()
+            success, frameRight = videoRight.read()
+            
+            grayFrameLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2GRAY)
+            grayFrameRight = cv2.cvtColor(frameRight,cv2.COLOR_BGR2GRAY)
 
             # Algorithm 1 Testing
-            # X,Y,Z = algorithm1.algorithm1(frameLeftGray,frameRightGray,minArea,substractor)
+            # X,Y,Z = algorithm1.algorithm1(grayFrameLeft,grayFrameRight,globalVariables.minArea,kernal,substractor)
             # Algorithm 2 Testing
-            X,Y,Z = algorithm2.algorithm2(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+            X,Y,Z = algorithm2.algorithm2(grayFrameLeft,grayFrameRight,globalVariables.minArea,kernal,substractor)
+
+            # Color Finder
+            # Algorithm 3 Testing - Blob Detector
+            # X,Y,Z = algorithm3.algorithm3(RGBFrameLeft,RGBFrameRight,'orange',globalVariables.minArea,customColor=False)
+            # Algorithm 4 Testing - Contour Finder
+            # X,Y,Z = algorithm4.algorithm4(RGBFrameLeft,RGBFrameRight,'orange',globalVariables.minArea,customColor=False)
 
             globalVariables.posListX.append(X)
             globalVariables.posListY.append(Y)
             
-            # Debugging
-            # Pack X, Y, Z values into a byte array
-            values = (0.0, 0.0, X, Y, Z, 0.0, 0.0, 0.0)
-            packer = struct.Struct('f f f f f f f f')
-            packed_data = packer.pack(*values)
-            s.send(packed_data) #send byte array to Unity server.
+            # # Debugging
+            # # Pack X, Y, Z values into a byte array
+            # values = (0.0, 0.0, X, Y, Z, 0.0, 0.0, 0.0)
+            # packer = struct.Struct('f f f f f f f f')
+            # packed_data = packer.pack(*values)
+            # s.send(packed_data) #send byte array to Unity server.
+            
             print(X,Y,Z)
-            cv2.imshow("FrameLeft", frameLeftGray)
-            cv2.imshow("FrameRight", frameRightGray)
-            cv2.waitKey(0)
+            grayFrameLeft = cv2.resize(grayFrameLeft,(0,0), None, 0.25,0.25)
+            cv2.imshow("FrameLeft", grayFrameLeft)
+            grayFrameRight = cv2.resize(grayFrameRight,(0,0), None, 0.25,0.25)
+            cv2.imshow("FrameRight", grayFrameRight)
+            cv2.waitKey(50)
     
     else: #Image Mode
-        # Create a background substarctor
-        # Takes first frame as empty iamge, first frame will always be without the ball
-        substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
-
         pathLeft = 'testImages/LabStereoImage/frameLeftRGB0.jpg'
         pathRight = 'testImages/LabStereoImage/frameRightRGB0.jpg'
         pathLeft2 = 'testImages/blueBall.jpg'
@@ -118,9 +128,15 @@ def main():
         pathRight3 = 'testImages/StereoCamera/right3 (1).jpg'
         pathLeft4 = 'testImages/LabImages/left1.jpg'
         pathRight4 = 'testImages/LabImages/right1.jpg'
+        pathLeft5 = 'testImages/LabImages/left5.jpg'
+        pathRight5 = 'testImages/LabImages/right5.jpg'
         
-        frameLeft = cv2.imread(pathLeft4)
-        frameRight = cv2.imread(pathRight4)
+        RGBFrameLeft = cv2.imread(pathLeft5)
+        RGBFrameRight = cv2.imread(pathRight5)
+        
+        # Motion Detection Mode - Doesn't Work on one frame analysis
+        grayFrameLeft = cv2.cvtColor(RGBFrameLeft,cv2.COLOR_BGR2GRAY)
+        grayFrameRight = cv2.cvtColor(RGBFrameRight,cv2.COLOR_BGR2GRAY)
         
         # Check if iamges are showing right
         # if True:
@@ -134,25 +150,25 @@ def main():
         # frameLeftGray = cv2.imread(pathLeft2, cv2.IMREAD_GRAYSCALE)
         # frameRightGray = cv2.imread(pathRight2, cv2.IMREAD_GRAYSCALE)
 
-        # Motion Detection
-        # Algorithm 3 Testing - Blob Detector
-        # X,Y,Z = algorithm1.algorithm1(frameLeft,frameRight,globalVariables.minArea,substractor)
-        # Algorithm 4 Testing - Contour Finder
-        # X,Y,Z = algorithm2.algorithm2(frameLeft,frameRight,globalVariables.minArea,substractor)
+        # Motion Detectin - Doesn't Work on one frame anaylsis
+        # Algorithm 1 Testing
+        # X,Y,Z = algorithm1.algorithm1(grayFrameLeft,grayFrameRight,globalVariables.minArea,kernal,substractor)
+        # Algorithm 2 Testing
+        # X,Y,Z = algorithm2.algorithm2(grayFrameLeft,grayFrameRight,globalVariables.minArea,kernal,substractor)
         
         # Color Finder
-        # Algorithm 1 Testing - Blob Detector
-        # X,Y,Z = algorithm3.algorithm3(frameLeft,frameRight,'blue',globalVariables.minArea,customColor=False)
-        # # Algorithm 2 Testing - Contour Finder
-        X,Y,Z = algorithm4.algorithm4(frameLeft,frameRight,'orange',globalVariables.minArea,customColor=True)
+        # Algorithm 3 Testing - Blob Detector
+        # X,Y,Z = algorithm3.algorithm3(RGBFrameLeft,RGBFrameRight,'orange',globalVariables.minArea,customColor=False)
+        # Algorithm 4 Testing - Contour Finder
+        # X,Y,Z = algorithm4.algorithm4(RGBFrameLeft,RGBFrameRight,'orange',globalVariables.minArea,customColor=False)
 
         globalVariables.posListX.append(X)
         globalVariables.posListY.append(Y)
         
         # Debugging
-        print(X,Y,Z)
-        cv2.imshow("FrameLeft", frameLeftGray)
-        cv2.imshow("FrameRight", frameRightGray)
+        print( "X Value: ", X, "\nY Value: ", Y,"\nZ Value: ",Z)
+        cv2.imshow("FrameLeft", RGBFrameLeft)
+        cv2.imshow("FrameRight", RGBFrameRight)
         cv2.waitKey(0)
 
 if __name__ == "__main__":

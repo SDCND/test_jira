@@ -85,8 +85,7 @@ class colorFinder:
         elif myColor == 'blue'or myColor == 'Blue':
             output = {'hmin': 103, 'smin': 68, 'vmin': 130, 'hmax': 128, 'smax': 255, 'vmax': 255}
         elif myColor == 'orange' or myColor == 'Orange':
-            print("Orange")
-            output = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+            output = {'hmin': 13, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
         else:
             output = None
             logging.warning("Color Not Defined")

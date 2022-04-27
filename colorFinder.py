@@ -7,7 +7,6 @@
     This function uses color to create a mask of the ball
     It has a debugger mode too that lets you custom fix the ball color
 '''
-
 import cv2
 import numpy as np
 import logging
@@ -48,7 +47,6 @@ class colorFinder:
 
         hsvVals = {"hmin": hmin, "smin": smin, "vmin": vmin,
                    "hmax": hmax, "smax": smax, "vmax": vmax}
-        print(hsvVals)
         return hsvVals
 
     def update(self, img, myColor=None):
@@ -58,7 +56,7 @@ class colorFinder:
         :return: (mask) bw image with white regions where color is detected
                  (imgColor) colored image only showing regions detected
         """
-        imgColor = [],
+        imgColor = []
         mask = []
 
         if self.trackBar:
@@ -85,8 +83,7 @@ class colorFinder:
         elif myColor == 'blue'or myColor == 'Blue':
             output = {'hmin': 103, 'smin': 68, 'vmin': 130, 'hmax': 128, 'smax': 255, 'vmax': 255}
         elif myColor == 'orange' or myColor == 'Orange':
-            print("Orange")
-            output = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+            output = {'hmin': 13, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
         else:
             output = None
             logging.warning("Color Not Defined")

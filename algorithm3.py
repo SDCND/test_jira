@@ -12,29 +12,24 @@ import math
 import colorFinder
 import globalVariables
 
-def algorithm1(frameLeft,frameRight,ballColor,minArea,customColor=False):
+def algorithm3(RGBFrameLeft,RGBFrameRight,ballColor,minArea,customColor=False):
     # Color Finder 
-    HSVImageLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
-    HSVImageRight = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
+    myColorFinder = colorFinder.colorFinder(False)
+    
+    HSVImageLeft, colorMaskLeft = myColorFinder.update(RGBFrameLeft, ballColor)
+    HSVImageRight, colorMaskRight = myColorFinder.update(RGBFrameRight, ballColor)
 
-    if not customColor:
-        myColorFinder = colorFinder.colorFinder(False)
-        HSVImageRight, colorMaskLeft = myColorFinder.update(HSVImageLeft, ballColor)
-        HSVImageRight, colorMaskRight = myColorFinder.update(HSVImageRight, ballColor)
-    else:
-        myColorFinder = myColorFinder(True)
-        
     # Blob detector
     # Setup SimpleBlobDetector parameters.
     params = cv2.SimpleBlobDetector_Params()
 
     # Change thresholds
-    params.minThreshold = 10
-    params.maxThreshold = 200
+    # params.minThreshold = 10
+    # params.maxThreshold = 200
 
     #Filter by Area.
     params.filterByArea = True
-    params.minArea = 2000
+    params.minArea = 10
     params.maxArea = 14500
 
     #Filter by Color
@@ -42,22 +37,28 @@ def algorithm1(frameLeft,frameRight,ballColor,minArea,customColor=False):
 
     # Filter by Circularity
     params.filterByCircularity = True
-    params.minCircularity = .7
+    params.minCircularity = .4
 
     # Filter by Convexity
-    params.filterByConvexity = True
-    params.minConvexity = 0.1
+    # params.filterByConvexity = True
+    # params.minConvexity = 0.1
 
     # Filter by Inertia
-    params.filterByInertia = True
-    params.minInertiaRatio = 0.01
+    # params.filterByInertia = True
+    # params.minInertiaRatio = 0.01
 
+    imgBlurredLeft = cv2.GaussianBlur(colorMaskLeft,(7,7),0)
+    imgBlurredRight = cv2.GaussianBlur(colorMaskRight,(7,7),0)
+    
     # Set up the blob detector.
     detector = cv2.SimpleBlobDetector_create(params)
 
     # Detect blobs from the images
     keypointsLeft = detector.detect(colorMaskLeft)
     keypointsRight = detector.detect(colorMaskRight)
+    
+    print(keypointsLeft)
+    print(keypointsRight)
 
     #Finding the center of the Blob
     xLeft = keypointsLeft[0].pt[0]
@@ -67,21 +68,17 @@ def algorithm1(frameLeft,frameRight,ballColor,minArea,customColor=False):
     yRight = keypointsRight[0].pt[1]
 
     # Displaying
-    blobs = cv2.drawKeypoints(frameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    blobs = cv2.drawKeypoints(frameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    blobsLeft = cv2.drawKeypoints(RGBFrameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    blobsRight = cv2.drawKeypoints(RGBFrameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     
     xLeft = float(xLeft)
     yLeft = float(yLeft)
     xRight = float(xRight)
-    yLeft = float(yRight)
+    yRight = float(yRight)
     centerxLeft = float(xLeft/2)
     centerxRight = float(xRight/2)
     Z = ((globalVariables.b * globalVariables.f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*globalVariables.pixelSize))/10
     X = ((Z * (xLeft-globalVariables.imageWidth)*globalVariables.pixelSize)/globalVariables.f)/10
     Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
-    
-    # Display
-    cv2.imshow("colorMaskLeft", colorMaskLeft)
-    cv2.imshow("colorMaskRight", colorMaskRight)
     
     return X,Y,Z

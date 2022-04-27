@@ -18,11 +18,11 @@ def algorithm2(imgLeft,imgRight):
     # Testing - Taking in a video for now
     # cap = cv2.VideoCapture(0)
     path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
-    path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
+    path1 = 'testvideos/bounds/orangeBallMiddleBound1.mov'
     path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
     path3 = 'testvideos/L2R.mp4'
     path4 = 'testvideos/R2L.mp4'
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(path1)
     posListX, posListY, positions = [], [], []
     xList = [item for item in range(0, 3840 )] # imageFrameWidthDimensions = 752, 4K 3840 
 
@@ -34,17 +34,21 @@ def algorithm2(imgLeft,imgRight):
     
     ballRadius = (PingPongBallDiameter)/2
     substractor = cv2.createBackgroundSubtractorMOG2()
+    kernal = np.ones((5,5),np.uint8)
     counter = 0
     inbound = True
     while True:
-        success, video = cap.read()
+        success, RGBFrame = cap.read()
         
-        videoGray = cv2.cvtColor(video,cv2.COLOR_BGR2GRAY)
+        grayFrame = cv2.cvtColor(RGBFrame,cv2.COLOR_BGR2GRAY)
         
-        imgMotionDetection = substractor.apply(videoGray)
+        imgMotionDetection = substractor.apply(grayFrame)
+        
+        motionMask = cv2.morphologyEx(imgMotionDetection, cv2.MORPH_OPEN, kernal)
+
 
         # Find object external outline points
-        imgContours, contours = findContours.findContours(videoGray, imgMotionDetection, minArea=1000)
+        imgContours, contours = findContours.findContours(grayFrame, motionMask, minArea=1000)
 
         if contours:
             if ballDirection.ballBouncing1(posListY) == True:
@@ -113,12 +117,10 @@ def algorithm2(imgLeft,imgRight):
                 frame = [X, Y, Z]
                 positions.append(frame) 
         # Display
-        # videoGray = cv2.resize(videoGray, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-        # cv2.imshow("Video Gray",videoGray)
-        imgMotionDetection = cv2.resize(imgMotionDetection, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
-        cv2.imshow("Motion Detection", imgMotionDetection)
-        imgColor = cv2.resize(imgContours, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
-        cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
+        motionMask = cv2.resize(motionMask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+        cv2.imshow("Motion Detection Mask", motionMask)
+        imgContours = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+        cv2.imshow("ImageColor", imgContours) # Makes the img appear on new window
 
         cv2.waitKey(50)
         # Return variables

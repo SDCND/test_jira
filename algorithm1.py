@@ -15,11 +15,14 @@ import globalVariables
 # Completed
 # ******* Testing Requuired ************
 
-def algorithm1(frameLeft,frameRight,minArea,substractor):
+def algorithm1(grayFrameLeft,grayFrameRight,minArea,kernal,substractor):
     # Motion Detection
-    imgMotionDetectionLeft = motionDetection.motionDetection(frameLeft, substractor)
-    imgMotionDetectionRight = motionDetection.motionDetection(frameRight, substractor)
+    imgMotionDetectionLeft = motionDetection.motionDetection(grayFrameLeft, substractor)
+    imgMotionDetectionRight = motionDetection.motionDetection(grayFrameRight, substractor)
     
+    motionMaskLeft = cv2.morphologyEx(imgMotionDetectionLeft, cv2.MORPH_OPEN, kernal)
+    motionMaskRight = cv2.morphologyEx(imgMotionDetectionRight, cv2.MORPH_OPEN, kernal)
+
     # Blob detector
     # Setup SimpleBlobDetector parameters.
     params = cv2.SimpleBlobDetector_Params()
@@ -52,8 +55,8 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     detector = cv2.SimpleBlobDetector_create(params)
 
     # Detect blobs from the images
-    keypointsLeft = detector.detect(imgMotionDetectionLeft)
-    keypointsRight = detector.detect(imgMotionDetectionRight)
+    keypointsLeft = detector.detect(motionMaskLeft)
+    keypointsRight = detector.detect(motionMaskRight)
 
     #Finding the center of the Blob
     xLeft = keypointsLeft[0].pt[0]
@@ -63,8 +66,8 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     yRight = keypointsRight[0].pt[1]
 
     # Displaying
-    blobs = cv2.drawKeypoints(frameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    blobs = cv2.drawKeypoints(frameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    blobs = cv2.drawKeypoints(grayFrameLeft, keypointsLeft, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    blobs = cv2.drawKeypoints(grayFrameRight, keypointsRight, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     
     xLeft = float(xLeft)
     yLeft = float(yLeft)

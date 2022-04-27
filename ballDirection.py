@@ -9,7 +9,6 @@
     General Knowledge:
         Using OpenCV x,y coordinate system, where Top left of the image is 0,0
 '''
-
 import logging
 
 

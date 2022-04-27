@@ -18,7 +18,7 @@ ballRadius = (PingPongBallDiameter)/2
 # xList = [item for item in range(0, imageFrameWidthDimensions)]
 posListX, posListY = [], []
 
-minArea = 1000
+minArea = 10
 
 # Extra Useful Code
 

@@ -22,12 +22,11 @@ cap = cv2.VideoCapture(path2)
 # Create the Color finder object
 myColorFinder = colorFinder.colorFinder(False)
 
-HSVOragneValue = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+HSVOragneValue = {'hmin': 13, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+# OG Oragange Mask {'hmin': 13, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
 
-# Mask values: 27 57 33 118 80 255
-# hsvVals = 
-# {"hmin": hmin, "smin": smin, "vmin": vmin, "hmax": hmax, "smax": smax, "vmax": vmax}
-#              0          20            176          253            63            255
+# h_min,h_max,s_min,s_max,v_min,v_max
+# 0 17 121 239 187 255
 
 imageFrameWidthDimensions = 2436 #4k
 posListX, posListY = [], []
@@ -98,13 +97,13 @@ while True:
         #                         scale=5, thickness=10, offset=20)
  
     # Display
-    img = cv2.resize(mask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("Image", img) # Makes the img appear on new window
+    mask = cv2.resize(mask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    cv2.imshow("Mask Black & White", mask) # Makes the img appear on new window
     
     imgColor = cv2.resize(imgColor, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("Image Color", imgColor) # Makes the img appear on new window
+    cv2.imshow("Mask Color", imgColor) # Makes the img appear on new window
 
     imgContours = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("Image Contours",imgContours ) # Makes the img appear on new window
+    cv2.imshow("Image",imgContours ) # Makes the img appear on new window
 
     cv2.waitKey(50) #Change the FPS for user sight only
