@@ -137,7 +137,7 @@ def main():
     # Testing - Manual Input of Images
     # cv2.imwrite("left.jpg", frameLeft)
     # cv2.imwrite("right.jpg", frameRight)
-    positions,inbound = algorithm2(frameLeft,frameRight,imageFrameWidthDimensions)
+    positions,inbound = algorithm2(frameLeft,frameRight)
     print(positions, inbound)
 
 if __name__ == "__main__":

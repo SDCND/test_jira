@@ -6,7 +6,7 @@ import numpy as np
 import copy
 
 #img = cv2.imread('../images/orangeBall.jpg')
-img = cv2.imread('images/greenBall.jpg')
+img = cv2.imread('testImages/greenBall.jpg')
 small_img = cv2.resize(img,(640,480))
 
 def nothing(x):

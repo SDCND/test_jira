@@ -11,7 +11,7 @@
 import cv2
 import numpy as np
 import math
-import motionDetection
+import TestFile.motionDetection as motionDetection
 import globalVariables
 
 def algorithm2(frameLeft,frameRight,minArea,substractor):
@@ -55,19 +55,26 @@ def algorithm2(frameLeft,frameRight,minArea,substractor):
             cv2.rectangle(frameRight, (x, y), (x + w, y + h), (255,0,0), 2)
             cv2.circle(frameRight, (x + (w // 2), y + (h // 2)), 5, (255,0,0), cv2.FILLED)
 
-
+    #*************** Hard Code Numbers From Intrinsic ***********
+    # Covernting Camera to Real World
+    imageWidth = 752 # cxLeft width
+    imageHeight = 480 # cyLeft height
+    b = 60; # baseline [mm]
+    f = 6; # focal length [mm]
+    pixelSize = .006; # pixel size [mm]
+    
     xLeft = float(cxLeft)
     yLeft = float(cyLeft)
     xRight = float(cxRight)
     yLeft = float(cyRight)
     centerxLeft = float(xLeft/2)
     centerxRight = float(xRight/2)
-    Z = ((globalVariables.b * globalVariables.f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*globalVariables.pixelSize))/10
-    X = ((Z * (xLeft-globalVariables.imageWidth)*globalVariables.pixelSize)/globalVariables.f)/10
-    Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
+    Z = ((b * f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*pixelSize))/1000
+    X = ((Z * (xLeft-imageWidth)*pixelSize)/f)/1000
+    Y = ((Z * (yLeft-imageHeight)*pixelSize)/f)/1000
 
     # Display
     cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)
     cv2.imshow("imgMotionDetectionRight", imgMotionDetectionRight)
 
-    return X,Y,Z
+    return X, Y, Z

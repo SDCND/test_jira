@@ -14,23 +14,38 @@ import math
 import colorFinder
 import globalVariables
 
-def algorithm4(frameLeft,frameRight, ballColor,minArea,customColor=False):
+def algorithm4(frameLeft,frameRight,ballColor,minArea,customColor=False):
     # Color Finder 
     HSVImageLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
     HSVImageRight = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
 
     if not customColor:
-        myColorFinder = colorFinder(False)
+        myColorFinder = colorFinder.colorFinder(False)
         HSVImageRight, colorMaskLeft = myColorFinder.update(HSVImageLeft, ballColor)
         HSVImageRight, colorMaskRight = myColorFinder.update(HSVImageRight, ballColor)
     else:
         myColorFinder = myColorFinder(True)
     
+    if True:
+        cv2.imshow("Mask Left", colorMaskLeft)
+        cv2.imshow("Mask Right", colorMaskRight)
+        print(frameLeft)
+        print("Space for shit")
+        print(frameRight)
+        cv2.waitKey(0)
+
     # Contour Finder
     # Find object external outline points
     imgContoursLeft, hierarchy = cv2.findContours(colorMaskLeft, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     imgContoursRight, hierarchy = cv2.findContours(colorMaskRight, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
+    print(imgContoursLeft)
+    print(imgContoursRight)
+    
+    cxLeft = 0
+    cyLeft = 0
+    cxRight = 0
+    cyRight = 0
     # Left contour iteration
     for contour in imgContoursLeft:
         areaLeft = cv2.contourArea(contour)
@@ -59,7 +74,8 @@ def algorithm4(frameLeft,frameRight, ballColor,minArea,customColor=False):
             cv2.rectangle(frameRight, (x, y), (x + w, y + h), (255,0,0), 2)
             cv2.circle(frameRight, (x + (w // 2), y + (h // 2)), 5, (255,0,0), cv2.FILLED)
 
-
+    print("NO Detection?")
+    print(cxLeft, cyLeft , cxRight, cyRight)
     xLeft = float(cxLeft)
     yLeft = float(cyLeft)
     xRight = float(cxRight)

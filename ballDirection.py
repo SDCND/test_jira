@@ -87,3 +87,14 @@ def ballLeftBound(positionListX):
     if previousPoint > currentPoint and previousPoint < oldestPoint:
         ballLeftBound = True
     return ballLeftBound
+
+def ballBouncing1(positionList):
+    ballBouncing = False
+    if len(positionList) < 3:
+        return logging.warning("Position list given has less than 3 positions, not enough data")
+    currentPoint = positionList[-1]
+    previousPoint = positionList[-2]
+    oldestPoint = positionList[-3]
+    if previousPoint > currentPoint and previousPoint > oldestPoint:
+        ballBouncing = True
+    return ballBouncing

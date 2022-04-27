@@ -91,28 +91,45 @@ def main():
             cv2.waitKey(0)
     
     else: #Image Mode
-        pathLeft = "testImages/LabStereoImage/frameLeftRGB0"
-        pathRight = "testImages/LabStereoImage/frameRightRGB0"
-        pathLeft2 = 'testImages/left5.jpg'
-        pathRight2 = 'testImages/right5.jpg'
+        # Create a background substarctor
+        # Takes first frame as empty iamge, first frame will always be without the ball
+        substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
 
-        frameLeft = cv2.imread(pathLeft2)
-        frameRight = cv2.imread(pathRight2)
-
-        frameLeftGray = cv2.imread(pathLeft2, cv2.IMREAD_GRAYSCALE)
-        frameRightGray = cv2.imread(pathRight2, cv2.IMREAD_GRAYSCALE)
+        pathLeft = 'testImages/LabStereoImage/frameLeftRGB0.jpg'
+        pathRight = 'testImages/LabStereoImage/frameRightRGB0.jpg'
+        pathLeft2 = 'testImages/blueBall.jpg'
+        pathRight2 = 'testImages/blueBall.jpg'
+        pathLeft3 = 'testImages/StereoCamera/left3 (1).jpg'
+        pathRight3 = 'testImages/StereoCamera/right3 (1).jpg'
+        pathLeft4 = 'testImages/LabImages/left1.jpg'
+        pathRight4 = 'testImages/LabImages/right1.jpg'
         
-        # Motion Detection        
+        frameLeft = cv2.imread(pathLeft4)
+        frameRight = cv2.imread(pathRight4)
+        
+        # Check if iamges are showing right
+        # if True:
+        #     cv2.imshow("FrameLeft", frameLeft)
+        #     cv2.imshow("FrameRight", frameRight)
+        #     print(frameLeft)
+        #     print("Space for shit")
+        #     print(frameRight)
+        #     cv2.waitKey(0)
+
+        # frameLeftGray = cv2.imread(pathLeft2, cv2.IMREAD_GRAYSCALE)
+        # frameRightGray = cv2.imread(pathRight2, cv2.IMREAD_GRAYSCALE)
+
+        # Motion Detection
         # Algorithm 3 Testing - Blob Detector
-        # X,Y,Z = algorithm3.algorithm3(frameLeftGray,frameRightGray,ballColor,globalVariables.minArea,customColor=False)
+        # X,Y,Z = algorithm1.algorithm1(frameLeft,frameRight,globalVariables.minArea,substractor)
         # Algorithm 4 Testing - Contour Finder
-        X,Y,Z = algorithm4.algorithm4(frameLeft,frameRight,ballColor,globalVariables.minArea,customColor=False)
+        # X,Y,Z = algorithm2.algorithm2(frameLeft,frameRight,globalVariables.minArea,substractor)
         
         # Color Finder
         # Algorithm 1 Testing - Blob Detector
-        # X,Y,Z = algorithm3.algorithm3(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+        # X,Y,Z = algorithm3.algorithm3(frameLeft,frameRight,'blue',globalVariables.minArea,customColor=False)
         # # Algorithm 2 Testing - Contour Finder
-        # X,Y,Z = algorithm4.algorithm4(frameLeftGray,frameRightGray,globalVariables.minArea,substractor)
+        X,Y,Z = algorithm4.algorithm4(frameLeft,frameRight,'orange',globalVariables.minArea,customColor=True)
 
         globalVariables.posListX.append(X)
         globalVariables.posListY.append(Y)

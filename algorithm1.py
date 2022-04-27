@@ -9,7 +9,7 @@
 import cv2
 import numpy as np
 import math
-import motionDetection
+import TestFile.motionDetection as motionDetection
 import globalVariables
 
 # Completed

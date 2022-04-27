@@ -12,18 +12,18 @@ import math
 import findContours
 import colorFinder
 import ballDirection
-import cvzone
+from colorFinder import colorFinder
 
 path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
 path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
 path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(path1)
 
 # Create the Color finder object
-myColorFinder = colorFinder.ColorFinder(False)
+myColorFinder = colorFinder(True)
 
 HSVOragneValue = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
-hsvVals = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+hsvVals = 'red' # {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
 
 imageFrameWidthDimensions = 2436 #4k
 posListX, posListY = [], []
@@ -46,7 +46,7 @@ while True:
     imgContours, contours = findContours.findContours(img, mask, minArea=200)
 
     # Add the x and y centers of the ball in the two array list
-    
+
     if contours:
         if ballDirection.ballBouncing1(posListY) == True:
             posListX = posListX[len(posListX)-2:]
@@ -94,10 +94,13 @@ while True:
         #                         scale=5, thickness=10, offset=20)
  
     # Display
-    img = cv2.resize(mask, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
+    img = cv2.resize(mask, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
     cv2.imshow("Image", img) # Makes the img appear on new window
+    
+    imgColor = cv2.resize(imgColor, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    cv2.imshow("Image Color", imgColor) # Makes the img appear on new window
 
-    imgColor = cv2.resize(imgContours, (0,0), None, 0.75,0.75) # Resized the img to fourth its size
-    cv2.imshow("ImageColor", imgColor) # Makes the img appear on new window
+    imgContours = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
+    cv2.imshow("Image Contours", imgContours) # Makes the img appear on new window
 
     cv2.waitKey(50) #Change the FPS for user sight only

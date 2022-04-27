@@ -90,6 +90,10 @@ def main():
 
     frameLeftGray,frameRightGray = cameraFeedthrough.getStereoGray()
     
+    # Create a background substarctor
+    # Takes first frame as empty iamge, first frame will always be without the ball
+    substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+
     print("Before While")
     
     count = 0
@@ -100,6 +104,7 @@ def main():
         cv2.imwrite("frameLeftGray%s.jpg" % count, frameLeftGray)
         cv2.imwrite("frameRightGray%s.jpg" % count, frameRightGray)
         count += 1
+        
         # X,Y,Z = algorithm1(frameLeftGray,frameRightGray,minArea)
         # posListX.append(X)
         # posListY.append(Y)
