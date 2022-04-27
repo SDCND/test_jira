@@ -1,2 +1,2 @@
 # AprilTagTenniseBallTracker
-Embedded Design System Two Final project, group of six
+Embedded System Design Two, Final project, group of six
