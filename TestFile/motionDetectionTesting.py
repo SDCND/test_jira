@@ -5,7 +5,7 @@ import numpy as np
 path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
 path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
 path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
-cap = cv2.VideoCapture(path)
+cap = cv2.VideoCapture(path2)
 
 # _, firstFrame = cap.read()
 # firstFrameGray = cv2.cvtColor(firstFrame,cv2.COLOR_BGR2GRAY)

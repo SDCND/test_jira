@@ -5,6 +5,8 @@ def empty(a):
     pass
 
 path = 'testImages/right5.jpg'
+path3 = 'testImages/LabImages/left1.jpg'
+path4 = 'testImages/LabImages/right1.jpg'
 
 # Creates a window
 cv2.namedWindow("TrackBars")
@@ -28,7 +30,7 @@ cv2.createTrackbar("Val Min","TrackBars",80,255,empty)
 cv2.createTrackbar("Val Max","TrackBars",255,255,empty)
 
 while True:
-    img = cv2.imread(path)
+    img = cv2.imread(path3)
     imgHSV = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
     h_min = cv2.getTrackbarPos("Hue Min","TrackBars")

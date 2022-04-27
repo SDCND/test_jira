@@ -12,18 +12,22 @@ import math
 import findContours
 import colorFinder
 import ballDirection
-from colorFinder import colorFinder
+# from colorFinder import colorFinder
 
 path = 'testvideos/bounces/orangeBallBouncePingPongTable1.mov'
 path1 = 'testvideos/bounds/orangeBallMiddleBound2.mov'
 path2 = 'testvideos/bounds/orangeBallRightBound2.mov'
-cap = cv2.VideoCapture(path1)
+cap = cv2.VideoCapture(path2)
 
 # Create the Color finder object
-myColorFinder = colorFinder(True)
+myColorFinder = colorFinder.colorFinder(False)
 
 HSVOragneValue = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
-hsvVals = 'red' # {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
+
+# Mask values: 27 57 33 118 80 255
+# hsvVals = 
+# {"hmin": hmin, "smin": smin, "vmin": vmin, "hmax": hmax, "smax": smax, "vmax": vmax}
+#              0          20            176          253            63            255
 
 imageFrameWidthDimensions = 2436 #4k
 posListX, posListY = [], []
@@ -34,16 +38,16 @@ while True:
     # Grabbing img
     success, img = cap.read()
     # img = cv2.imread("testImages/orangeBall.jpg")
-
+    
     # Create the mask for the color of object
-    imgColor, mask  = myColorFinder.update(img,hsvVals)
+    imgColor, mask  = myColorFinder.update(img,HSVOragneValue)
 
     # Mask to help get rid of noise
     # mask = cv2.erode(mask1,(5,5),iterations=3)
     # mask = cv2.dilate(mask,(5,5),iterations=3)
 
     # Find object external outline points
-    imgContours, contours = findContours.findContours(img, mask, minArea=200)
+    imgContours, contours = findContours.findContours(img, mask, minArea=500)
 
     # Add the x and y centers of the ball in the two array list
 
@@ -101,6 +105,6 @@ while True:
     cv2.imshow("Image Color", imgColor) # Makes the img appear on new window
 
     imgContours = cv2.resize(imgContours, (0,0), None, 0.25,0.25) # Resized the img to fourth its size
-    cv2.imshow("Image Contours", imgContours) # Makes the img appear on new window
+    cv2.imshow("Image Contours",imgContours ) # Makes the img appear on new window
 
     cv2.waitKey(50) #Change the FPS for user sight only
