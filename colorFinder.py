@@ -78,17 +78,18 @@ class colorFinder:
     def getColorHSV(self, myColor):
 
         # Add White,Black, yellow, pink
-        if myColor == 'red':
+        if myColor == 'red'or myColor == 'Red':
             output = {'hmin': 146, 'smin': 141, 'vmin': 77, 'hmax': 179, 'smax': 255, 'vmax': 255}
-        elif myColor == 'green':
+        elif myColor == 'green'or myColor == 'Green':
             output = {'hmin': 44, 'smin': 79, 'vmin': 111, 'hmax': 79, 'smax': 255, 'vmax': 255}
-        elif myColor == 'blue':
+        elif myColor == 'blue'or myColor == 'Blue':
             output = {'hmin': 103, 'smin': 68, 'vmin': 130, 'hmax': 128, 'smax': 255, 'vmax': 255}
+        elif myColor == 'orange' or myColor == 'Orange':
+            output = {'hmin': 0, 'smin': 109, 'vmin': 208, 'hmax': 19, 'smax': 255, 'vmax': 255}
         else:
             output = None
             logging.warning("Color Not Defined")
             logging.warning("Available colors: red, green, blue ")
-
         return output
 
 

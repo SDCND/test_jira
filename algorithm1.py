@@ -72,9 +72,9 @@ def algorithm1(frameLeft,frameRight,minArea,substractor):
     yLeft = float(yRight)
     centerxLeft = float(xLeft/2)
     centerxRight = float(xRight/2)
-    Z = ((globalVariables.b * globalVariables.f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*globalVariables.pixelSize))/10
-    X = ((Z * (xLeft-globalVariables.imageWidth)*globalVariables.pixelSize)/globalVariables.f)/10
-    Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/10
+    Z = ((globalVariables.b * globalVariables.f)/(abs((xLeft-centerxLeft)-(xRight-centerxRight))*globalVariables.pixelSize))/1000
+    X = ((Z * (xLeft-globalVariables.imageWidth)*globalVariables.pixelSize)/globalVariables.f)/1000
+    Y = ((Z * (yLeft-globalVariables.imageHeight)*globalVariables.pixelSize)/globalVariables.f)/1000
     
     # Display
     cv2.imshow("imgMotionDetectionLeft", imgMotionDetectionLeft)

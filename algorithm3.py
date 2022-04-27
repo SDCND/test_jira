@@ -17,7 +17,7 @@ def algorithm1(frameLeft,frameRight,ballColor,minArea,customColor=False):
     HSVImageLeft = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
     HSVImageRight = cv2.cvtColor(frameLeft,cv2.COLOR_BGR2HSV)
 
-    if customColor:
+    if not customColor:
         myColorFinder = colorFinder(False)
         HSVImageRight, colorMaskLeft = myColorFinder.update(HSVImageLeft, ballColor)
         HSVImageRight, colorMaskRight = myColorFinder.update(HSVImageRight, ballColor)
